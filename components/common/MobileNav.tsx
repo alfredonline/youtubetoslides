@@ -6,13 +6,20 @@ import { BiSolidSlideshow } from "react-icons/bi";
 import { siteName } from "@/data";
 import Link from "next/link";
 import { ScrollArea } from "../ui/scroll-area";
-import {RegisterLink, LoginLink, LogoutLink} from "@kinde-oss/kinde-auth-nextjs/components";
+import {
+  RegisterLink,
+  LoginLink,
+  LogoutLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
+import { FaGem } from "react-icons/fa";
 
 const MobileNav = ({
-  user
+  user,
+  tokenCount,
 }: {
-  user: KindeUser
+  user: KindeUser;
+  tokenCount: number | undefined;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -56,7 +63,16 @@ const MobileNav = ({
                 <Link href="/settings" onClick={() => setIsOpen(false)}>
                   Settings
                 </Link>
-                <LogoutLink  onClick={() => setIsOpen(false)}>
+                <div className="flex items-center gap-2">
+                  <span className="flex gap-2 items-center">
+                    <FaGem className="h-5 w-5 mr-2" />
+                    <div>{tokenCount}</div>
+                  </span>
+                </div>
+                <LogoutLink
+                  onClick={() => setIsOpen(false)}
+                  className="text-red-500"
+                >
                   Logout
                 </LogoutLink>
               </div>

@@ -13,7 +13,7 @@ import Link from "next/link";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { FaGem } from "react-icons/fa6";
 
-const ProfilePopover = ({ user }: { user: KindeUser }) => {
+const ProfilePopover = ({ user, tokenCount}: { user: KindeUser, tokenCount: number | undefined }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,7 +44,7 @@ const ProfilePopover = ({ user }: { user: KindeUser }) => {
         <DropdownMenuSeparator />
       <DropdownMenuItem>
         <FaGem className="h-5 w-5 mr-2" />
-        <span className="text-sm">Gem Count: 5</span>
+        <span className="text-sm">Gem Count: {tokenCount}</span>
       </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

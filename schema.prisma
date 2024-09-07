@@ -1,0 +1,36 @@
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model GeneratedPowerpoints {
+    id  String   @default(cuid()) @id
+    link    String 
+    createdAt   DateTime    @default(now()) @map(name: "created_at")
+    slideCount  Int
+    sourceURL   String 
+    owner       User    @relation(fields: [ownerId], references: [id])
+    ownerId     String
+    title String?
+    description  String?
+}
+
+model User {
+    id  String  @default(cuid()) @id
+    name    String      @default("")
+    email   String      @unique
+    createdAt   DateTime    @default(now()) @map(name: "created_at")
+    hasPurchasedCoins       Boolean @default(false)
+    lastCoinPurchase        DateTime?
+    totalSpend      Int     @default(0)
+    tokenCount      Int     @default(3)
+    powerpoints     GeneratedPowerpoints[]
+    currentSecretForPayment   String?
+    @@map("users")
+}

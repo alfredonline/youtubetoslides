@@ -16,7 +16,7 @@ const SectionTitle = ({
   return (
     <div className="-mx-4 flex flex-wrap">
       <div
-        className={`w-full px-4 ${center ? "mx-auto" : ""}`}
+        className={`w-full px-4 ${center ? "mx-auto text-center" : ""}`}
         style={{ maxWidth: width }}
       >
         {subtitle && (

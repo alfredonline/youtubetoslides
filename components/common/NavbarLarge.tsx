@@ -5,14 +5,24 @@ import { buttonVariants } from "../ui/button";
 import { MdOutlineDashboard } from "react-icons/md";
 import { LiaGemSolid } from "react-icons/lia";
 import MobileNav from "./MobileNav";
-import {RegisterLink, LoginLink} from "@kinde-oss/kinde-auth-nextjs/components";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { KindeUser } from "@kinde-oss/kinde-auth-nextjs/types";
 import ProfilePopover from "../ProfilePopover";
+import prisma from "@/lib/prisma";
 
 const NavbarLarge = async () => {
-  const { getUser } = getKindeServerSession()
-  const user = await getUser() as KindeUser;
+  const { getUser } = getKindeServerSession();
+  const user = (await getUser()) as KindeUser;
+
+  const userInDB = await prisma.user.findFirst({
+    where: {
+      id: user?.id,
+    },
+  });
 
   return (
     <div className="flex items-center justify-between px-8 py-4 w-full text-gray-900 border-b border-gray-300">
@@ -29,9 +39,7 @@ const NavbarLarge = async () => {
           <Link href="/purchase-gems">Pricing</Link>
         </div>
       </div>
-      <MobileNav 
-        user={user}
-      />
+      <MobileNav user={user} tokenCount={userInDB?.tokenCount} />
       {user ? (
         <div className="space-x-4 items-center hidden md:flex">
           <div className="flex items-center gap-2">
@@ -54,19 +62,15 @@ const NavbarLarge = async () => {
             >
               Buy Gems <LiaGemSolid className="h-6 w-6" />
             </Link>
-            <ProfilePopover user={user} />
+            <ProfilePopover user={user} tokenCount={userInDB?.tokenCount} />
           </div>
         </div>
       ) : (
-        <div
-          className="space-x-4 items-center hidden md:flex"
-        >
+        <div className="space-x-4 items-center hidden md:flex">
           <LoginLink
-            className={
-              buttonVariants({
-                variant: "outline",
-              })
-            }
+            className={buttonVariants({
+              variant: "outline",
+            })}
           >
             Log in
           </LoginLink>
@@ -75,7 +79,7 @@ const NavbarLarge = async () => {
               variant: "default",
             })}
           >
-              Create account
+            Create account
           </RegisterLink>
         </div>
       )}
